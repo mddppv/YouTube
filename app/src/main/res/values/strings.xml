@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">YouTube</string>
+    <string name="title">Title</string>
+    <string name="videos">0 videos</string>
+    <string name="playlist">Playlist</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="description">Description</string>
+    <string name="time">00:00</string>
+    <string name="back">Back</string>
+</resources>
