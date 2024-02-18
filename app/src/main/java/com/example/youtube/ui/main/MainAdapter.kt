@@ -8,9 +8,10 @@ import com.bumptech.glide.Glide
 import com.example.youtube.data.model.PlaylistsModel
 import com.example.youtube.databinding.ItemPlaylistBinding
 
-class MainAdapter(private val onClick: (PlaylistsModel.Item) -> Unit) :
-    RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
-    private var list = arrayListOf<PlaylistsModel.Item>()
+class MainAdapter(
+    private val onClick: (PlaylistsModel.Item) -> Unit
+) : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
+    private val list = arrayListOf<PlaylistsModel.Item>()
 
     @SuppressLint("NotifyDataSetChanged")
     fun submitList(newList: List<PlaylistsModel.Item>) {
@@ -36,13 +37,14 @@ class MainAdapter(private val onClick: (PlaylistsModel.Item) -> Unit) :
 
     inner class MainViewHolder(private val binding: ItemPlaylistBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(item: PlaylistsModel.Item) {
             with(binding) {
                 Glide.with(itemView)
-                    .load(item.snippet?.thumbnails?.default?.url)
+                    .load(item.snippet?.thumbnails?.high?.url)
                     .into(ivVideo)
                 tvTitle.text = item.snippet?.title
-                tvVideoCount.text = item.contentDetails?.itemCount.toString()
+                tvVideoCount.text = item.contentDetails?.itemCount.toString() + " Видео"
                 llPlaylist.setOnClickListener {
                     onClick.invoke(item)
                 }

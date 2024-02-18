@@ -11,9 +11,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 val networkModule = module {
-    single { provideRetrofit(get()) }
+    factory { provideRetrofit(get()) }
     factory { provideOkHttpClient(get()) }
-    single { provideInterceptor() }
+    factory { provideInterceptor() }
     factory { provideYouTubeApiService(get()) }
 }
 

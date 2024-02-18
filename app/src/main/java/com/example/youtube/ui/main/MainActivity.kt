@@ -2,6 +2,7 @@ package com.example.youtube.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.youtube.data.model.PlaylistsModel
 import com.example.youtube.databinding.ActivityMainBinding
@@ -12,13 +13,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val adapter = MainAdapter(this::onClick)
     private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.rvMain.adapter = MainAdapter { item -> onClick(item) }
+
+        binding.rvMain.adapter = adapter
 
         initViewModel()
     }
@@ -30,11 +33,13 @@ class MainActivity : AppCompatActivity() {
                 is Resource.Error -> viewModel.loadingProgressBar.postValue(false)
                 is Resource.Success -> {
                     viewModel.loadingProgressBar.postValue(false)
-                    resource.data?.let {
-                        (binding.rvMain.adapter as? MainAdapter)?.submitList(it.items as List<PlaylistsModel.Item>)
-                    }
+                    resource.data?.let { adapter.submitList(it.items) }
                 }
             }
+        }
+
+        viewModel.loadingProgressBar.observe(this) { load ->
+            binding.progressBar.visibility = if (load) View.VISIBLE else View.GONE
         }
     }
 
@@ -43,7 +48,6 @@ class MainActivity : AppCompatActivity() {
             putExtra("id", item.id)
             putExtra("title", item.snippet?.title)
             putExtra("description", item.snippet?.description)
-            putExtra("count", item.contentDetails?.itemCount)
         }
         startActivity(intent)
     }
